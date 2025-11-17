@@ -13,7 +13,7 @@ Players make hiring decisions and see how different student roles (Copywriter, D
 
 ## How to Play
 
-[View the live game here](#) *(link will be added after deployment)*
+[View the live game here](https://the-internal-solution.vercel.app/) 
 
 Or run locally:
 1. Download this repository
@@ -33,5 +33,5 @@ Or run locally:
 
 - Pure HTML/CSS/JavaScript
 - No frameworks or dependencies
-- Mobile responsive
+- Mobile responsive (but I recommend desktop for a better experrience)
 - Works offline once loaded
