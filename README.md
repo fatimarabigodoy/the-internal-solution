@@ -33,5 +33,5 @@ Or run locally:
 
 - Pure HTML/CSS/JavaScript
 - No frameworks or dependencies
-- Mobile responsive
+- Mobile responsive (but I recommend desktop for a better experrience)
 - Works offline once loaded
