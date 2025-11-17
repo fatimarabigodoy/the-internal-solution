@@ -859,12 +859,23 @@
             }
 
             .frame {
-                padding: 100px 20px 40px;
+                padding: 100px 15px 40px;
             }
 
             .content-box {
-                padding: 35px 30px;
-                border-width: 6px;
+                padding: 30px 18px;
+                border-width: 5px;
+                box-shadow: 
+                    5px 0 0 0 #2E5CFF,
+                    0 5px 0 0 #2E5CFF,
+                    5px 5px 0 0 #2E5CFF,
+                    10px 5px 0 0 #FFD93D,
+                    5px 10px 0 0 #FFD93D,
+                    10px 10px 0 0 #FFD93D;
+            }
+
+            #frame1 .content-box {
+                padding: 30px 18px;
             }
 
             h1 {
@@ -872,6 +883,74 @@
                 text-shadow: 
                     2px 2px 0px #2E5CFF,
                     4px 4px 0px #FFD93D;
+                margin-bottom: 15px;
+            }
+
+            h2 {
+                font-size: 1.4rem;
+                margin-bottom: 20px;
+            }
+
+            .subtitle {
+                font-size: 1.1rem;
+                margin-bottom: 20px;
+            }
+
+            .body-text {
+                font-size: 1rem;
+                line-height: 1.7;
+                margin: 15px 0;
+            }
+
+            .illustration-placeholder {
+                height: 250px;
+                margin: 20px auto;
+            }
+
+            /* Center the begin button on mobile */
+            .btn {
+                padding: 16px 36px;
+                font-size: 1rem;
+                margin: 20px auto 10px;
+                display: block;
+                width: fit-content;
+            }
+
+            .btn-secondary {
+                margin-top: 10px;
+            }
+
+            /* Improved choice button layout for mobile - letter on top */
+            .choice-btn {
+                padding: 20px 15px;
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+                align-items: center;
+            }
+
+            .choice-letter {
+                font-size: 1.8rem;
+                width: 55px;
+                height: 55px;
+                flex-shrink: 0;
+                margin: 0;
+            }
+
+            .choice-content {
+                width: 100%;
+                text-align: center;
+            }
+
+            .choice-title {
+                font-size: 1.05rem;
+                margin-bottom: 10px;
+                line-height: 1.3;
+            }
+
+            .choice-desc {
+                font-size: 0.95rem;
+                line-height: 1.6;
             }
 
             .student-header {
@@ -883,21 +962,107 @@
                 text-align: center;
             }
 
+            .student-card {
+                padding: 25px 18px;
+            }
+
+            .student-name {
+                font-size: 1.1rem;
+            }
+
+            .student-tagline {
+                font-size: 1rem;
+                margin: 15px 0;
+            }
+
+            .student-details {
+                gap: 15px;
+            }
+
             .detail-row {
                 flex-direction: column;
-                gap: 8px;
+                gap: 5px;
+                align-items: flex-start;
+                padding: 12px;
             }
 
             .detail-label {
                 min-width: auto;
+                font-size: 0.85rem;
+            }
+
+            .detail-value {
+                font-size: 0.95rem;
+                line-height: 1.5;
+            }
+
+            .result-box, .challenge-box {
+                padding: 20px 15px;
+                margin: 20px 0;
+            }
+
+            .result-title {
+                font-size: 1rem;
+                margin-bottom: 12px;
+            }
+
+            .result-content {
+                font-size: 0.95rem;
+                line-height: 1.6;
             }
 
             .team-display {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .team-member {
+                padding: 25px 18px;
+            }
+
+            .team-name {
+                font-size: 1rem;
             }
 
             .students-grid {
                 grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .student-mini-card {
+                padding: 25px 18px;
+            }
+
+            .mini-portrait {
+                width: 90px;
+                height: 90px;
+            }
+
+            .mini-role {
+                font-size: 1rem;
+            }
+
+            .mini-tagline {
+                font-size: 0.9rem;
+            }
+
+            .form-group {
+                margin-bottom: 20px;
+            }
+
+            .form-group input,
+            .form-group textarea {
+                font-size: 0.95rem;
+                padding: 12px 15px;
+            }
+
+            .context-label {
+                font-size: 0.85rem;
+                margin-bottom: 12px;
+            }
+
+            .scenario-grid {
+                gap: 20px;
             }
 
             .home-content-wrapper {
@@ -914,6 +1079,27 @@
 
             .home-text-column .subtitle {
                 text-align: center;
+            }
+
+            .home-text-column .body-text {
+                text-align: center;
+            }
+
+            /* Force center the begin button on mobile */
+            .home-text-column .btn {
+                margin-left: auto;
+                margin-right: auto;
+            }
+
+            /* Make student portraits bigger on mobile */
+            .student-portrait {
+                width: 140px;
+                height: 140px;
+            }
+
+            .team-portrait {
+                width: 120px;
+                height: 120px;
             }
 
             .home-illustration {
