@@ -1,0 +1,1705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The INTERNal Solution</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Bungee&family=Courier+Prime:wght@400;700&family=Schoolbell&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier Prime', monospace;
+            background: #FFF4E6;
+            color: #3D2817;
+            overflow-x: hidden;
+            position: relative;
+            min-height: 100vh;
+        }
+
+        /* Paper texture overlay */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(0deg, rgba(0,0,0,0.03) 0px, transparent 1px, transparent 2px, rgba(0,0,0,0.03) 3px),
+                repeating-linear-gradient(90deg, rgba(0,0,0,0.03) 0px, transparent 1px, transparent 2px, rgba(0,0,0,0.03) 3px);
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        /* Navigation controls */
+        .nav-controls {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            z-index: 100;
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: #2E5CFF;
+            color: #FFF4E6;
+            border: 4px solid #3D2817;
+            padding: 12px 20px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.85rem;
+            cursor: pointer;
+            text-transform: uppercase;
+            transition: all 0.1s ease;
+        }
+
+        .nav-btn:hover {
+            transform: translate(-2px, -2px);
+            border-bottom-width: 8px;
+            border-right-width: 8px;
+        }
+
+        .nav-btn:active {
+            transform: translate(0, 0);
+            border-width: 4px;
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        .frame {
+            display: none;
+            min-height: 100vh;
+            padding: 120px 40px 60px;
+            z-index: 2;
+            position: relative;
+        }
+
+        .frame.active {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* Content container */
+        .content-box {
+            background: #FFFFFF;
+            border: 8px solid #3D2817;
+            border-radius: 20px;
+            padding: 50px 60px;
+            max-width: 900px;
+            width: 100%;
+            box-shadow: 
+                8px 0 0 0 #2E5CFF,
+                0 8px 0 0 #2E5CFF,
+                8px 8px 0 0 #2E5CFF,
+                16px 8px 0 0 #FFD93D,
+                8px 16px 0 0 #FFD93D,
+                16px 16px 0 0 #FFD93D;
+            position: relative;
+            text-align: center;
+        }
+
+        /* Wider, more compact box for intro frame */
+        #frame1 .content-box {
+            max-width: 1100px;
+            padding: 50px 60px;
+        }
+
+        /* Typography */
+        h1 {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(2rem, 4.5vw, 3.5rem);
+            color: #FF3B3B;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            letter-spacing: 2px;
+            text-shadow: 
+                3px 3px 0px #2E5CFF,
+                6px 6px 0px #FFD93D;
+            line-height: 1.2;
+        }
+
+        /* Special styling for INTERNAL wordplay */
+        .title-intern {
+            color: #FFD93D;
+            text-shadow: 
+                3px 3px 0px #FF3B3B,
+                6px 6px 0px #2E5CFF;
+        }
+
+        h2 {
+            font-family: 'Bungee', cursive;
+            font-size: clamp(1.3rem, 2.5vw, 2rem);
+            color: #2E5CFF;
+            text-transform: uppercase;
+            margin-bottom: 25px;
+            line-height: 1.3;
+        }
+
+        .subtitle {
+            font-family: 'Schoolbell', cursive;
+            font-size: 1.4rem;
+            color: #3D2817;
+            margin-bottom: 25px;
+            line-height: 1.5;
+        }
+
+        .body-text {
+            font-size: 1.15rem;
+            line-height: 1.8;
+            color: #3D2817;
+            margin: 20px 0;
+            text-align: left;
+        }
+
+        .body-text.center {
+            text-align: center;
+        }
+
+        .context-label {
+            font-family: 'Bungee', cursive;
+            font-size: 0.95rem;
+            color: #FF3B3B;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+            letter-spacing: 1px;
+        }
+
+        /* Illustration placeholder */
+        .illustration-placeholder {
+            width: 100%;
+            max-width: 600px;
+            height: 400px;
+            margin: 30px auto;
+            background: linear-gradient(135deg, #FFE4E4 0%, #E4F1FF 100%);
+            border: 6px solid #3D2817;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bungee', cursive;
+            font-size: 0.9rem;
+            color: rgba(61, 40, 23, 0.3);
+            text-align: center;
+            padding: 20px;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                6px 0 0 0 #FFD93D,
+                0 6px 0 0 #FFD93D,
+                6px 6px 0 0 #FFD93D;
+        }
+
+        .illustration-placeholder::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 200px;
+            height: 200px;
+            background: rgba(255, 255, 255, 0.4);
+            border-radius: 50%;
+        }
+
+        .illustration-placeholder span {
+            position: relative;
+            z-index: 1;
+        }
+
+        /* Teams-style chat UI for setup frame */
+        .teams-chat-container {
+            width: 100%;
+            max-width: 600px;
+            margin: 30px auto;
+            background: #FFFFFF;
+            border: 6px solid #3D2817;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 
+                6px 0 0 0 #2E5CFF,
+                0 6px 0 0 #2E5CFF,
+                6px 6px 0 0 #2E5CFF;
+        }
+
+        .teams-header {
+            background: #5B5FC7;
+            color: #FFFFFF;
+            padding: 12px 20px;
+            font-family: 'Bungee', cursive;
+            font-size: 0.85rem;
+            text-transform: uppercase;
+            border-bottom: 4px solid #3D2817;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .teams-status {
+            width: 10px;
+            height: 10px;
+            background: #92C353;
+            border-radius: 50%;
+            border: 2px solid #FFFFFF;
+        }
+
+        .teams-messages {
+            padding: 20px;
+            background: #F5F5F5;
+            min-height: 320px;
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .teams-message {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            animation: messageSlide 0.3s ease forwards;
+            opacity: 0;
+        }
+
+        @keyframes messageSlide {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .teams-message:nth-child(1) { animation-delay: 0.2s; }
+        .teams-message:nth-child(2) { animation-delay: 0.6s; }
+        .teams-message:nth-child(3) { animation-delay: 1.0s; }
+        .teams-message:nth-child(4) { animation-delay: 1.4s; }
+        .teams-message:nth-child(5) { animation-delay: 1.8s; }
+
+        .message-header {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .message-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: #2E5CFF;
+            border: 3px solid #3D2817;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Bungee', cursive;
+            font-size: 0.75rem;
+            color: #FFFFFF;
+        }
+
+        .message-name {
+            font-family: 'Courier Prime', monospace;
+            font-weight: 700;
+            font-size: 0.95rem;
+            color: #3D2817;
+        }
+
+        .message-time {
+            font-family: 'Courier Prime', monospace;
+            font-size: 0.85rem;
+            color: #666;
+            margin-left: auto;
+        }
+
+        .message-body {
+            margin-left: 40px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            line-height: 1.5;
+            color: #3D2817;
+            background: #FFFFFF;
+            padding: 10px 14px;
+            border-radius: 6px;
+            border: 3px solid #3D2817;
+            text-align: left;
+        }
+
+        .message-body.urgent {
+            background: #FFE4E4;
+            border-color: #FF3B3B;
+            font-weight: 700;
+        }
+
+        .home-content-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin: 30px 0;
+        }
+
+        /* Compact layout for intro frame */
+        .home-content-wrapper.compact {
+            align-items: center;
+            gap: 50px;
+            margin: 20px 0;
+        }
+
+        .home-text-column {
+            flex: 1;
+            text-align: left;
+        }
+
+        .home-text-column h1 {
+            text-align: left;
+            margin-bottom: 15px;
+        }
+
+        .home-text-column .subtitle {
+            text-align: left;
+            margin-bottom: 25px;
+        }
+
+        .home-text-column .body-text {
+            text-align: left;
+        }
+
+        .home-text-column .btn {
+            margin-top: 30px;
+            margin-left: 0;
+            margin-right: auto;
+            display: block;
+            width: fit-content;
+        }
+
+        .home-illustration {
+            max-width: 300px;
+            flex-shrink: 0;
+        }
+
+        .home-illustration.large {
+            max-width: 380px;
+            flex-shrink: 0;
+        }
+
+        .home-illustration img {
+            width: 100%;
+            height: auto;
+            display: block;
+        }
+
+        .home-text {
+            flex: 1;
+        }
+
+        .illustration-small {
+            width: 100%;
+            max-width: 500px;
+            height: 320px;
+        }
+
+        .illustration-large {
+            width: 100%;
+            max-width: 700px;
+            height: 450px;
+        }
+
+        /* Buttons */
+        .btn {
+            background: #FFD93D;
+            color: #3D2817;
+            border: 5px solid #3D2817;
+            padding: 18px 45px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            font-family: 'Bungee', cursive;
+            cursor: pointer;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 8px 8px 0 #3D2817;
+            transition: all 0.2s ease;
+            margin: 10px;
+            display: inline-block;
+            text-decoration: none;
+        }
+
+        .btn:hover {
+            transform: translate(4px, 4px);
+            box-shadow: 4px 4px 0 #3D2817;
+        }
+
+        .btn:active {
+            transform: translate(8px, 8px);
+            box-shadow: 0 0 0 #3D2817;
+        }
+
+        .btn-secondary {
+            background: #2E5CFF;
+            color: #FFF4E6;
+        }
+
+        .btn-small {
+            padding: 12px 30px;
+            font-size: 0.95rem;
+        }
+
+        /* Choice buttons */
+        .choices {
+            display: flex;
+            flex-direction: column;
+            gap: 18px;
+            margin: 35px auto;
+            max-width: 750px;
+            width: 100%;
+        }
+
+        .choice-btn {
+            background: #FFF4E6;
+            border: 5px solid #3D2817;
+            padding: 25px 30px;
+            text-align: left;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            display: flex;
+            align-items: flex-start;
+            gap: 20px;
+        }
+
+        .choice-btn:hover {
+            background: #FFE4E4;
+            border-color: #FF3B3B;
+            transform: translateX(10px);
+        }
+
+        .choice-letter {
+            font-family: 'Bungee', cursive;
+            font-size: 1.8rem;
+            color: #FF3B3B;
+            min-width: 40px;
+            line-height: 1;
+        }
+
+        .choice-content {
+            flex: 1;
+        }
+
+        .choice-title {
+            font-family: 'Bungee', cursive;
+            font-size: 1.1rem;
+            color: #2E5CFF;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            line-height: 1.3;
+        }
+
+        .choice-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #3D2817;
+        }
+
+        /* Student card - Game character style */
+        .student-card {
+            background: #FFFFFF;
+            border: none;
+            border-radius: 20px;
+            padding: 50px;
+            max-width: 900px;
+            margin: 30px auto;
+            box-shadow: 0 12px 40px rgba(0,0,0,0.15);
+            position: relative;
+        }
+
+        .student-header {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+            margin-bottom: 30px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid rgba(61, 40, 23, 0.1);
+        }
+
+        .student-portrait {
+            width: 280px;
+            height: 280px;
+            border: 6px solid #3D2817;
+            border-radius: 20px;
+            flex-shrink: 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                6px 0 0 0 #FFD93D,
+                0 6px 0 0 #FFD93D,
+                6px 6px 0 0 #FFD93D;
+        }
+
+        .student-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .student-portrait span {
+            position: relative;
+            z-index: 1;
+            font-family: 'Bungee', cursive;
+            font-size: 0.75rem;
+            color: rgba(61, 40, 23, 0.3);
+            text-align: center;
+            padding: 15px;
+        }
+
+        .student-info {
+            flex: 1;
+            text-align: left;
+        }
+
+        .student-name {
+            font-family: 'Bungee', cursive;
+            font-size: 1.8rem;
+            color: #FF3B3B;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+            line-height: 1.2;
+        }
+
+        .student-role {
+            font-family: 'Schoolbell', cursive;
+            font-size: 1.3rem;
+            color: #2E5CFF;
+            line-height: 1.3;
+        }
+
+        .student-tagline {
+            font-family: 'Schoolbell', cursive;
+            font-size: 1.2rem;
+            color: #3D2817;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #FFF4E6;
+            border-left: 5px solid #FFD93D;
+            border-radius: 8px;
+            font-style: italic;
+            text-align: left;
+        }
+
+        .student-details {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .detail-row {
+            display: flex;
+            gap: 15px;
+            text-align: left;
+            padding: 15px;
+            background: #F8F8F8;
+            border-radius: 8px;
+            border-left: 4px solid #2E5CFF;
+        }
+
+        .detail-label {
+            font-family: 'Bungee', cursive;
+            font-size: 0.9rem;
+            color: #2E5CFF;
+            text-transform: uppercase;
+            min-width: 90px;
+            flex-shrink: 0;
+        }
+
+        .detail-value {
+            font-size: 1rem;
+            line-height: 1.6;
+            color: #3D2817;
+            flex: 1;
+        }
+
+        /* Team display */
+        .team-display {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 30px;
+            margin: 35px 0;
+        }
+
+        .team-member {
+            background: #FFFFFF;
+            border: none;
+            border-radius: 16px;
+            padding: 35px;
+            text-align: center;
+            box-shadow: 0 6px 20px rgba(0,0,0,0.12);
+        }
+
+        .team-portrait {
+            width: 200px;
+            height: 200px;
+            margin: 0 auto 20px;
+            border: 5px solid #3D2817;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                5px 0 0 0 #2E5CFF,
+                0 5px 0 0 #2E5CFF,
+                5px 5px 0 0 #2E5CFF;
+        }
+
+        .team-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .team-portrait span {
+            position: relative;
+            z-index: 1;
+            font-family: 'Bungee', cursive;
+            font-size: 0.7rem;
+            color: rgba(61, 40, 23, 0.3);
+            text-align: center;
+            padding: 15px;
+        }
+
+        .team-name {
+            font-family: 'Bungee', cursive;
+            font-size: 1.4rem;
+            color: #FF3B3B;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .team-role {
+            font-family: 'Schoolbell', cursive;
+            font-size: 1.1rem;
+            color: #2E5CFF;
+        }
+
+        /* All students grid */
+        .students-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 35px 0;
+        }
+
+        .student-mini-card {
+            background: #FFFFFF;
+            border: none;
+            border-radius: 16px;
+            padding: 30px;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            cursor: default;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+
+        .student-mini-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+        }
+
+        .mini-portrait {
+            width: 140px;
+            height: 140px;
+            margin: 0 auto 15px;
+            border: 4px solid #3D2817;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                4px 0 0 0 #FFD93D,
+                0 4px 0 0 #FFD93D,
+                4px 4px 0 0 #FFD93D;
+        }
+
+        .mini-portrait img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .mini-portrait span {
+            position: relative;
+            z-index: 1;
+            font-family: 'Bungee', cursive;
+            font-size: 0.65rem;
+            color: rgba(61, 40, 23, 0.3);
+            padding: 10px;
+        }
+
+        .mini-role {
+            font-family: 'Bungee', cursive;
+            font-size: 1rem;
+            color: #2E5CFF;
+            text-transform: uppercase;
+            margin-bottom: 10px;
+        }
+
+        .mini-tagline {
+            font-size: 0.95rem;
+            line-height: 1.5;
+            color: #3D2817;
+            font-style: italic;
+        }
+
+        /* Form styling */
+        .form-group {
+            margin-bottom: 25px;
+            text-align: left;
+        }
+
+        .form-label {
+            font-family: 'Bungee', cursive;
+            font-size: 0.95rem;
+            color: #2E5CFF;
+            text-transform: uppercase;
+            display: block;
+            margin-bottom: 10px;
+        }
+
+        .form-input,
+        .form-textarea {
+            width: 100%;
+            padding: 15px;
+            font-family: 'Courier Prime', monospace;
+            font-size: 1rem;
+            border: 4px solid #3D2817;
+            border-radius: 8px;
+            background: #FFF4E6;
+            color: #3D2817;
+            transition: all 0.3s ease;
+        }
+
+        .form-input:focus,
+        .form-textarea:focus {
+            outline: none;
+            border-color: #2E5CFF;
+            background: #FFFFFF;
+        }
+
+        .form-textarea {
+            min-height: 120px;
+            resize: vertical;
+        }
+
+        /* Credits */
+        .credits {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 3px dashed #3D2817;
+            font-size: 0.95rem;
+            color: #3D2817;
+            text-align: center;
+        }
+
+        .credits a {
+            color: #2E5CFF;
+            text-decoration: none;
+            font-weight: 700;
+            transition: color 0.3s ease;
+        }
+
+        .credits a:hover {
+            color: #FF3B3B;
+            text-decoration: underline;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .nav-controls {
+                top: 15px;
+                left: 15px;
+                gap: 10px;
+            }
+
+            .nav-btn {
+                padding: 10px 15px;
+                font-size: 0.75rem;
+            }
+
+            .progress-bar {
+                top: 15px;
+                right: 15px;
+                padding: 12px 18px;
+                font-size: 0.75rem;
+            }
+
+            .frame {
+                padding: 100px 20px 40px;
+            }
+
+            .content-box {
+                padding: 35px 30px;
+                border-width: 6px;
+            }
+
+            h1 {
+                font-size: 2rem;
+                text-shadow: 
+                    2px 2px 0px #2E5CFF,
+                    4px 4px 0px #FFD93D;
+            }
+
+            .student-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .student-info {
+                text-align: center;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 8px;
+            }
+
+            .detail-label {
+                min-width: auto;
+            }
+
+            .team-display {
+                grid-template-columns: 1fr;
+            }
+
+            .students-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .home-content-wrapper {
+                flex-direction: column;
+            }
+
+            .home-content-wrapper.compact {
+                gap: 25px;
+            }
+
+            .home-text-column h1 {
+                text-align: center;
+            }
+
+            .home-text-column .subtitle {
+                text-align: center;
+            }
+
+            .home-illustration {
+                max-width: 250px;
+            }
+
+            .home-illustration.large {
+                max-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Controls -->
+    <div class="nav-controls">
+        <button id="backBtn" class="nav-btn" onclick="goBack()">← BACK</button>
+    </div>
+
+    <!-- FRAME 1: INTRO -->
+    <div class="frame active" id="frame1">
+        <div class="content-box">
+            <div class="home-content-wrapper compact">
+                <div class="home-text-column">
+                    <h1>THE <span class="title-intern">INTERN</span>AL SOLUTION</h1>
+                    <div class="subtitle">A choose-your-own-chaos experience.</div>
+                    <div class="body-text">
+                        Hiring interns is a gamble.<br>
+                        You don't know if they'll get it, fit in, or actually help.<br><br>
+                        Unless the gamble was rigged in your favour from the start.
+                    </div>
+                    <button class="btn" onclick="goToFrame(2)">BEGIN</button>
+                </div>
+                <div class="home-illustration large">
+                    <img src="images/home-illustration.png" alt="Your intern">
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 2: SETUP -->
+    <div class="frame" id="frame2">
+        <div class="content-box">
+            <h2>IT'S THURSDAY AT 4PM</h2>
+            
+            <div class="teams-chat-container">
+                <div class="teams-header">
+                    <div class="teams-status"></div>
+                    <span>General – Senior Team</span>
+                </div>
+                <div class="teams-messages">
+                    <div class="teams-message">
+                        <div class="message-header">
+                            <div class="message-avatar">CD</div>
+                            <div class="message-name">Creative Director</div>
+                            <div class="message-time">4:03 PM</div>
+                        </div>
+                        <div class="message-body">
+                            Anyone free? Need eyes on the City of Ottawa pitch deck.
+                        </div>
+                    </div>
+                    
+                    <div class="teams-message">
+                        <div class="message-header">
+                            <div class="message-avatar">AM</div>
+                            <div class="message-name">Account Manager</div>
+                            <div class="message-time">4:06 PM</div>
+                        </div>
+                        <div class="message-body">
+                            Client just moved the presentation to Monday 9am
+                        </div>
+                    </div>
+                    
+                    <div class="teams-message">
+                        <div class="message-header">
+                            <div class="message-avatar">CD</div>
+                            <div class="message-name">Creative Director</div>
+                            <div class="message-time">4:07 PM</div>
+                        </div>
+                        <div class="message-body urgent">
+                            MONDAY?? We need concept development + deck design by EOD tomorrow
+                        </div>
+                    </div>
+                    
+                    <div class="teams-message">
+                        <div class="message-header">
+                            <div class="message-avatar">SR</div>
+                            <div class="message-name">Senior Designer</div>
+                            <div class="message-time">4:09 PM</div>
+                        </div>
+                        <div class="message-body">
+                            I'm slammed with the rebrand launch... maybe grab an intern?
+                        </div>
+                    </div>
+                    
+                    <div class="teams-message">
+                        <div class="message-header">
+                            <div class="message-avatar">CD</div>
+                            <div class="message-name">Creative Director</div>
+                            <div class="message-time">4:11 PM</div>
+                        </div>
+                        <div class="message-body">
+                            Good call. Let's see what they can do.
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <button class="btn" onclick="goToFrame(3)">WHAT'S THE PROJECT?</button>
+        </div>
+    </div>
+
+    <!-- FRAME 3: SCENARIO SELECTION -->
+    <div class="frame" id="frame3">
+        <div class="content-box">
+            <h2>PICK YOUR CRISIS</h2>
+            <div class="subtitle">Choose the project that's keeping you up at night!</div>
+            <div class="choices">
+                <div class="choice-btn" onclick="selectScenario('rebrand'); goToFrame(4);">
+                    <div class="choice-letter">A</div>
+                    <div class="choice-content">
+                        <div class="choice-title">The Rebrand Nobody Asked For</div>
+                        <div class="choice-desc">Client's CEO discovered TED Talks. Now they want to "own a feeling." Budget: $4K. Timeline: 3 weeks.</div>
+                    </div>
+                </div>
+                <div class="choice-btn" onclick="selectScenario('social'); goToFrame(4);">
+                    <div class="choice-letter">B</div>
+                    <div class="choice-content">
+                        <div class="choice-title">The Campaign That Could Backfire</div>
+                        <div class="choice-desc">Launching for a brand people have opinions about. Client wants "authentic engagement." You want to keep your job.</div>
+                    </div>
+                </div>
+                <div class="choice-btn" onclick="selectScenario('pitch'); goToFrame(4);">
+                    <div class="choice-letter">C</div>
+                    <div class="choice-content">
+                        <div class="choice-title">The Pitch That's Actually Five Pitches</div>
+                        <div class="choice-desc">Client keeps changing their mind. The deck is 52 slides. Your team is losing it. You need someone to hold this together.</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- FRAME 4: FIRST CHOICE -->
+    <div class="frame" id="frame4">
+        <div class="content-box">
+            <div class="context-label" id="scenarioContext">YOUR SCENARIO</div>
+            <h2 id="scenarioTitle"></h2>
+            <div class="body-text" id="scenarioDescription"></div>
+            <div class="subtitle">Who do you bring in first?</div>
+            <div class="choices" id="firstChoices"></div>
+        </div>
+    </div>
+
+    <!-- FRAME 5: MEET FIRST STUDENT -->
+    <div class="frame" id="frame5">
+        <div class="content-box">
+            <h2>MEET YOUR FIRST HIRE</h2>
+            <div id="student1Card" class="student-card"></div>
+            <button class="btn" onclick="goToFrame(6)">WEEK 1: KICKOFF</button>
+        </div>
+    </div>
+
+    <!-- FRAME 6: WEEK 1 CHALLENGE -->
+    <div class="frame" id="frame6">
+        <div class="content-box">
+            <div class="context-label">WEEK 1</div>
+            <h2 id="week1Title"></h2>
+            <div class="body-text center" id="week1Description"></div>
+            <button class="btn" onclick="goToFrame(7)">SEE THEIR WORK</button>
+        </div>
+    </div>
+
+    <!-- FRAME 7: WEEK 1 RESULTS -->
+    <div class="frame" id="frame7">
+        <div class="content-box">
+            <div class="context-label">WEEK 1: RESULT</div>
+            <h2 id="week1ResultTitle"></h2>
+            <div class="body-text" id="week1Result"></div>
+            <div class="body-text center" style="margin-top: 30px;"><strong>You need more hands on deck.</strong></div>
+            <button class="btn" onclick="goToFrame(8)">HIRE SOMEONE ELSE</button>
+        </div>
+    </div>
+
+    <!-- FRAME 8: SECOND CHOICE -->
+    <div class="frame" id="frame8">
+        <div class="content-box">
+            <div class="context-label">WEEK 2</div>
+            <h2 id="week2Challenge"></h2>
+            <div class="body-text center" id="week2Description"></div>
+            <div class="subtitle">Who do you bring in next?</div>
+            <div class="choices" id="secondChoices"></div>
+        </div>
+    </div>
+
+    <!-- FRAME 9: MEET SECOND STUDENT -->
+    <div class="frame" id="frame9">
+        <div class="content-box">
+            <h2>MEET YOUR SECOND HIRE</h2>
+            <div id="student2Card" class="student-card"></div>
+            <button class="btn" onclick="goToFrame(10)">WEEK 3: COLLABORATION</button>
+        </div>
+    </div>
+
+    <!-- FRAME 10: COLLABORATION -->
+    <div class="frame" id="frame10">
+        <div class="content-box">
+            <div class="context-label">WEEK 3-5</div>
+            <h2>THE REAL TEAMWORK BEGINS</h2>
+            <div class="body-text" id="collaborationDescription"></div>
+            <button class="btn" onclick="playSuccess(); goToFrame(11)">IT'S PITCH DAY!</button>
+        </div>
+    </div>
+
+    <!-- FRAME 11: PITCH RESULT -->
+    <div class="frame" id="frame11">
+        <div class="content-box">
+            <div class="context-label">MONDAY MORNING</div>
+            <h2>THE PITCH</h2>
+            
+            <div style="max-width: 650px; margin: 30px auto; display: flex; flex-direction: column; gap: 15px;">
+                <!-- Email 1: During pitch -->
+                <div style="background: #FFFFFF; border: 4px solid #3D2817; border-radius: 8px; padding: 15px 20px; box-shadow: 4px 0 0 0 #FFD93D, 0 4px 0 0 #FFD93D, 4px 4px 0 0 #FFD93D;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background: #FF3B3B; border-radius: 50%;"></div>
+                        <div style="font-family: 'Courier Prime', monospace; font-size: 0.85rem; color: #666;">9:47 AM</div>
+                    </div>
+                    <div style="font-family: 'Courier Prime', monospace; font-size: 0.95rem; color: #3D2817; line-height: 1.5;">
+                        <strong>From: Client CEO</strong><br>
+                        <span style="font-style: italic;">"wait is this actually going to work"</span>
+                    </div>
+                </div>
+
+                <!-- Email 2: Mid-pitch -->
+                <div style="background: #FFFFFF; border: 4px solid #3D2817; border-radius: 8px; padding: 15px 20px; box-shadow: 4px 0 0 0 #2E5CFF, 0 4px 0 0 #2E5CFF, 4px 4px 0 0 #2E5CFF;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background: #FFD93D; border-radius: 50%;"></div>
+                        <div style="font-family: 'Courier Prime', monospace; font-size: 0.85rem; color: #666;">10:03 AM</div>
+                    </div>
+                    <div style="font-family: 'Courier Prime', monospace; font-size: 0.95rem; color: #3D2817; line-height: 1.5;">
+                        <strong>From: Client CMO</strong><br>
+                        <span style="font-style: italic;">"Can you send me this deck right now"</span>
+                    </div>
+                </div>
+
+                <!-- Email 3: End of pitch -->
+                <div style="background: #FFFFFF; border: 4px solid #3D2817; border-radius: 8px; padding: 15px 20px; box-shadow: 4px 0 0 0 #92C353, 0 4px 0 0 #92C353, 4px 4px 0 0 #92C353;">
+                    <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 8px;">
+                        <div style="width: 8px; height: 8px; background: #92C353; border-radius: 50%;"></div>
+                        <div style="font-family: 'Courier Prime', monospace; font-size: 0.85rem; color: #666;">10:28 AM</div>
+                    </div>
+                    <div style="font-family: 'Courier Prime', monospace; font-size: 0.95rem; color: #3D2817; line-height: 1.5;">
+                        <strong>From: Client CEO</strong><br>
+                        <span style="font-style: italic;">"When can we start?"</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="body-text center">
+                The deck is tight. The strategy is clear.<br>
+                The creative feels inevitable.<br><br>
+                The client asks three questions, and your team answers all of them.<br><br>
+                <strong>You win the pitch.</strong>
+            </div>
+            <button class="btn" onclick="goToFrame(12)">WHAT JUST HAPPENED?</button>
+        </div>
+    </div>
+
+    <!-- FRAME 12: REVEAL TEAM -->
+    <div class="frame" id="frame12">
+        <div class="content-box">
+            <h2>YOUR TEAM</h2>
+            <!-- ILLUSTRATION PLACEHOLDERS: Two team members, 200px × 200px each -->
+            <div class="team-display" id="teamDisplay"></div>
+            <div class="body-text center">Two interns. One week. Actually helpful.</div>
+            <button class="btn" onclick="goToFrame(13)">BUT HOW?</button>
+        </div>
+    </div>
+
+    <!-- FRAME 13: THE REVEAL -->
+    <div class="frame" id="frame13">
+        <div class="content-box">
+            <h2>HERE'S THE THING</h2>
+            <div class="body-text">
+                Every path through this experience ends the same way: the pitch succeeds. It's not because we rigged the story; it's because <strong>Algonquin doesn't train "interns."</strong><br><br>
+                
+                They train strategists, designers, copywriters, account coordinators, digital planners, and researchers (among many more!), each one tutored in their craft by professionals still working in the field.<br><br>
+                
+                You don't need a generalist who "helps out"; you need a fresh mind that knows what they're doing (and is willing and hoping to learn if they don't).
+            </div>
+            <button class="btn" onclick="goToFrame(14)">SHOW ME MORE STUDENTS</button>
+            <button class="btn btn-secondary" onclick="goToFrame(15)">REQUEST INTERNS</button>
+        </div>
+    </div>
+
+    <!-- FRAME 14: ALL STUDENTS -->
+    <div class="frame" id="frame14">
+        <div class="content-box">
+            <h2>MEET THE CLASS</h2>
+            <div class="body-text center" style="margin-top: 35px;">
+                While this game shows only six roles, the reality is that every ad student from Algonquin has received training in every area of advertising. Some might specialize in one thing, but we know how it all comes together.<br>
+            </div>
+
+            <div class="students-grid">
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/copywriter.jpg" alt="The Copywriter"></div>
+                    <div class="mini-role">The Copywriter</div>
+                    <div class="mini-tagline">Writes headlines that make you stop scrolling. Also page-long documents, scripts, and one-liners you'll want to steal.</div>
+                </div>
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/designer.jpg" alt="The Designer"></div>
+                    <div class="mini-role">The Designer</div>
+                    <div class="mini-tagline">Builds visual systems that make sense even before you read the copy.</div>
+                </div>
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/strategist.jpg" alt="The Strategist"></div>
+                    <div class="mini-role">The Strategist</div>
+                    <div class="mini-tagline">Finds the thing nobody said out loud, then builds the entire campaign around it.</div>
+                </div>
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/digital-strategist.jpg" alt="The Digital Strategist"></div>
+                    <div class="mini-role">The Digital Strategist</div>
+                    <div class="mini-tagline">Knows what's working on TikTok before your target audience does.</div>
+                </div>
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/account-coordinator.jpg" alt="The Account Coordinator"></div>
+                    <div class="mini-role">The Account Coordinator</div>
+                    <div class="mini-tagline">Keeps the chaos organized. Translates 'client speak' into something creatives can use.</div>
+                </div>
+                <div class="student-mini-card">
+                    <div class="mini-portrait"><img src="images/researcher.jpg" alt="The Researcher"></div>
+                    <div class="mini-role">The Researcher</div>
+                    <div class="mini-tagline">Finds the data that proves your hunch was right (or saves you from a bad idea).</div>
+                </div>
+            </div>
+
+            <div class="body-text center" style="margin-top: 35px;">
+                Every agency needs something different, and every advertising student at Algonquin is adaptable.<br>
+                <strong>That's how you know you'll find your match.</strong>
+            </div>
+
+            <button class="btn" onclick="goToFrame(15)">REQUEST INTERNS FOR SPRING</button>
+            <button class="btn btn-secondary" onclick="resetGame()">PLAY AGAIN</button>
+        </div>
+    </div>
+
+    <!-- FRAME 15: REQUEST FORM -->
+    <div class="frame" id="frame15">
+        <div class="content-box">
+            <h2>REQUEST ALGONQUIN INTERNS</h2>
+            <div class="subtitle">Tell us what you need, and we'll match you with students who can actually do it.</div>
+            
+            <form onsubmit="return handleFormSubmit(event)" style="margin-top: 35px;">
+                <div class="form-group">
+                    <label class="form-label" for="name">Your Name *</label>
+                    <input type="text" id="name" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="organization">Organization *</label>
+                    <input type="text" id="organization" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="email">Email *</label>
+                    <input type="email" id="email" class="form-input" required>
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="roles">What roles do you need?</label>
+                    <input type="text" id="roles" class="form-input" placeholder="e.g., Copywriter, Designer, Digital Strategist...">
+                </div>
+                
+                <div class="form-group">
+                    <label class="form-label" for="message">Tell us about your projects (optional)</label>
+                    <textarea id="message" class="form-textarea" placeholder="What kind of work would they be doing?"></textarea>
+                </div>
+                
+                <button type="submit" class="btn">SUBMIT REQUEST</button>
+            </form>
+
+            <div class="credits">
+                Concept developed by <a href="https://www.linkedin.com/in/kelmys-sampayo-694570274/" target="_blank">Kelmys Sampayo</a>, 
+                <a href="https://www.linkedin.com/in/victoria-conwell-7ba067209/" target="_blank">Victoria Conwell</a>, and 
+                <a href="https://www.linkedin.com/in/fatima-rabi/" target="_blank">Fatima Rabi</a>.
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const studentIllustrations = {
+            copywriter: "images/copywriter.jpg",
+            designer: "images/designer.jpg",
+            strategist: "images/strategist.jpg",
+            digitalStrategist: "images/digital-strategist.jpg",
+            accountCoordinator: "images/account-coordinator.jpg",
+            researcher: "images/researcher.jpg"
+        };
+
+        const students = {
+            copywriter: {
+                role: "The Copywriter",
+                tagline: "Writes headlines that make you stop scrolling. Also page-long documents, scripts, and one-liners you'll want to steal.",
+                skills: "Tone, structure, turning boring into memorable.",
+                vibe: "Annoyingly good at headlines on the first try. But they are aware that the first idea is not always the best, so they will massage it to perfection.",
+                obsession: "Old copy-focused car ads and why they remain iconic."
+            },
+            designer: {
+                role: "The Designer",
+                tagline: "Builds visual systems that make sense even before you read the copy.",
+                skills: "Concept-driven design, layout, making boring categories look cool.",
+                vibe: "Has strong opinions about kerning and leading. You'll appreciate it later.",
+                obsession: "Wes Anderson frames, hand-painted signs, old magazines, and much, much Pinterest usage."
+            },
+            strategist: {
+                role: "The Strategist",
+                tagline: "Finds the thing nobody said out loud, then builds the entire campaign around it.",
+                skills: "Consumer psychology, cultural trends, making sense of data in a way that doesn't kill the creative spark.",
+                vibe: "Quiet until they drop a sentence that changes the whole room.",
+                obsession: '"Shower thoughts" subreddit, re-reading old documents.'
+            },
+            digitalStrategist: {
+                role: "The Digital Strategist",
+                tagline: "Knows what's working on TikTok before your target audience does.",
+                skills: "Platform strategy, content planning, analytics that actually inform creative.",
+                vibe: "Fluent in internet culture without being cringe about it.",
+                obsession: "Deep into social listening, concerningly high screentime (for the sake of research)."
+            },
+            accountCoordinator: {
+                role: "The Account Coordinator",
+                tagline: "Keeps the chaos organized. Translates 'client speak' into something creatives can use.",
+                skills: "Client management, timelines, creative briefs that don't suck, knowing when to push back.",
+                vibe: "Calm under fire, secretly running three pitches at once.",
+                obsession: "Organizing their multiple calendars, thinking nonstop of the next deadlines."
+            },
+            researcher: {
+                role: "The Researcher",
+                tagline: "Finds the data that proves your hunch was right (or saves you from a bad idea).",
+                skills: "Qualitative & quantitative research, augmentation, sniffing out cultural shifts.",
+                vibe: "Loves a good spreadsheet and finds joy in mundane analytics.",
+                obsession: "Exploring niche insights and analysis."
+            }
+        };
+
+        const scenarios = {
+            rebrand: {
+                context: "YOUR SCENARIO",
+                title: "THE REBRAND NOBODY ASKED FOR",
+                description: `The client's CEO read a Malcolm Gladwell book and now wants to "own a feeling." The brand has been around since 1987. The budget is $4,000. The timeline is three weeks.<br><br>Your first meeting is tomorrow. You need someone who can figure out what this brand actually stands for (before the CEO makes you rebrand it into oblivion).`,
+                firstChoices: [
+                    { letter: "A", title: "BRING IN A STRATEGIST", desc: "Someone who can dig past the buzzwords and find what this brand actually means to people.", student: "strategist" },
+                    { letter: "B", title: "BRING IN A COPYWRITER", desc: 'Someone whose words can exchange "boring" with "bold."', student: "copywriter" },
+                    { letter: "C", title: "BRING IN A DESIGNER", desc: "Someone who can build a visual system that feels fresh without alienating existing customers.", student: "designer" }
+                ],
+                week1Title: "FIRST CLIENT MEETING",
+                week1Description: `The CEO starts with, "I want our brand to feel like… you know when you're at the cottage and the sun hits the water just right?"<br><br>Your intern doesn't blink.`,
+                week1Results: {
+                    strategist: `The Strategist spent the week interviewing long-time customers, digging through old brand archives, and reading industry forums nobody knew existed.<br><br>They reach a clear conclusion: "This brand isn't aspirational. It's reliable. People don't want it to change; they want permission to take it seriously again."<br><br>The CEO goes quiet. Then nods.`,
+                    copywriter: `The Copywriter spent the week writing. A lot.<br><br>They deliver a one-page document titled "The Boring Ones Win" about brands that don't chase trends because they're too busy being useful.<br><br>It's sharp, confident, and makes the 1987 founding date sound like an asset.<br><br>The CEO reads it twice.`,
+                    designer: `The Designer spent the week researching the brand's original design language: its colours, typography, and even the packaging from the 80s that people still remember.<br><br>They come back with executions that feel both nostalgic and modern, implementing bold type, muted colours, and unapologetic simplicity.<br><br>The CEO stares at the mood board for a full minute. Then says, "This is it."`
+                },
+                week2Challenge: 'THE CEO WANTS TO "TEST" THE NEW DIRECTION',
+                week2Description: `Translation: They want a full campaign to show at the board meeting in two weeks.<br><br>You need more hands.`,
+                secondChoices: {
+                    strategist: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Turn The Strategist's approach into messaging that sounds like a real brand, not simply a Word document.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Build the visual world that brings The Strategist's positioning to life.", student: "designer" },
+                        { letter: "C", title: "BRING IN A DIGITAL STRATEGIST", desc: "Figure out how this rebrand shows up online without looking like a midlife crisis (or simply trying too hard).", student: "digitalStrategist" }
+                    ],
+                    copywriter: [
+                        { letter: "A", title: "BRING IN A STRATEGIST", desc: "Make sure The Copywriter's script is grounded in actual consumer truth, not just good writing.", student: "strategist" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Turn The Copywriter's words into an execution that does half the talking.", student: "designer" },
+                        { letter: "C", title: "BRING IN AN ACCOUNT COORDINATOR", desc: "Someone to do the talking and manage the board deck, keeping everyone sane.", student: "accountCoordinator" }
+                    ],
+                    designer: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Write messaging that matches the concept The Designer just established.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A STRATEGIST", desc: "Make sure The Designer's executions are grounded in brand truth, not just aesthetic preference.", student: "strategist" },
+                        { letter: "C", title: "BRING IN A DIGITAL STRATEGIST", desc: "Figure out how this visual system translates to all things social, web, and email.", student: "digitalStrategist" }
+                    ]
+                },
+                collaboration: `They split the work without you asking them to.<br><br>One handles strategy and messaging. The other builds the creative concepts and campaign mockups.<br><br>They present to you before presenting to the client. The work is tight. You make two small notes. They fix them quickly.`
+            },
+            social: {
+                context: "YOUR SCENARIO",
+                title: "THE CAMPAIGN THAT COULD BACKFIRE",
+                description: `You're launching a campaign for a brand people have opinions about. Strong opinions.<br><br>The client wants "authentic engagement." Your job is to not become a cautionary tale.<br><br>The campaign launches in four weeks. You need someone who understands internet culture without embarrassing everyone.`,
+                firstChoices: [
+                    { letter: "A", title: "BRING IN A DIGITAL STRATEGIST", desc: "Someone who knows which platforms work, which trends are dead, and which jokes will get you flopping (or worse, fired).", student: "digitalStrategist" },
+                    { letter: "B", title: "BRING IN A COPYWRITER", desc: "Someone who can write captions that feel human, not corporate cosplaying as relatable.", student: "copywriter" },
+                    { letter: "C", title: "BRING IN A STRATEGIST", desc: "Someone who can find the insight that makes this campaign feel necessary, not opportunistic.", student: "strategist" }
+                ],
+                week1Title: "CONTENT STRATEGY SESSION",
+                week1Description: `The client brings a folder of "inspiration," filled with mostly viral tweets from the 2010s from brands that don't even understand what their audience likes.<br><br>Your intern opens TikTok.`,
+                week1Results: {
+                    digitalStrategist: `The Digital Strategist spends the week analyzing what's actually working (not what brands think is working).<br><br>They come back with a content plan: three platform-specific approaches, zero "hey fellow kids" energy, and a list of cultural moments to avoid at all costs.<br><br>The strategy is smart enough that the client stops trying to make their own suggestions.`,
+                    copywriter: `The Copywriter spends the week writing, testing different tones, different formats, and even different levels of self-awareness.<br><br>They deliver 20 caption options, each one calibrated for a specific type of comment section. Some are funny. Some are straightforward. None feel fake.<br><br>The client picks their favourites. You don't have to rewrite a single one.`,
+                    strategist: `The Strategist spends the week digging: reading subreddits, scrolling through comment sections, and finding the conversations people are actually having about this category.<br><br>They come back with: "People don't hate this brand. They hate being sold to. What if we helped them do something they were already trying to do?"<br><br>The room gets quiet. Then someone says, "Wait, that could actually work."`
+                },
+                week2Challenge: "TIME TO BUILD THE ACTUAL CONTENT",
+                week2Description: `The strategy is approved. Now you need someone to help execute it without losing the authenticity that made it work in the first place.<br><br>You need more hands.`,
+                secondChoices: {
+                    digitalStrategist: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Someone who can write captions that match The Digital Strategist's platform insights.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Someone who can create visuals that feel native to each platform.", student: "designer" },
+                        { letter: "C", title: "BRING IN A STRATEGIST", desc: "Ground the execution in deeper consumer insight before it goes live.", student: "strategist" }
+                    ],
+                    copywriter: [
+                        { letter: "A", title: "BRING IN A DIGITAL STRATEGIST", desc: "Make sure The Copywriter's captions are optimized for each platform's algorithm and culture.", student: "digitalStrategist" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Create visuals that enhance The Copywriter's messaging without overpowering it.", student: "designer" },
+                        { letter: "C", title: "BRING IN AN ACCOUNT COORDINATOR", desc: "Manage client expectations and keep the content calendar on track.", student: "accountCoordinator" }
+                    ],
+                    strategist: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Turn The Strategist's insight into actual social content people will engage with.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A DIGITAL STRATEGIST", desc: "Figure out how to distribute The Strategist's big idea across platforms.", student: "digitalStrategist" },
+                        { letter: "C", title: "BRING IN A DESIGNER", desc: "Visualize The Strategist's concept in a way that stops the scroll.", student: "designer" }
+                    ]
+                },
+                collaboration: `They split the work without you asking them to.<br><br>One handles the content calendar and platform strategy. The other creates the executions and tests variations.<br><br>They present to you before presenting to the client. The work feels authentic. You make one small note. They adjust immediately.`
+            },
+            pitch: {
+                context: "YOUR SCENARIO",
+                title: "THE NEVER-ENDING PITCH",
+                description: `The client keeps changing their mind. First it was a product launch. Then a brand refresh. Now it's a "holistic ecosystem strategy."<br><br>The deck is 52 slides. Everyone on your team is losing their minds. You need some additional support to hold this chaos together before everyone quits.`,
+                firstChoices: [
+                    { letter: "A", title: "BRING IN AN ACCOUNT COORDINATOR", desc: "Someone who can translate client stress into something the team can actually build.", student: "accountCoordinator" },
+                    { letter: "B", title: "BRING IN A STRATEGIST", desc: "Someone who can find the connecting theme that makes all these requests make sense.", student: "strategist" },
+                    { letter: "C", title: "BRING IN A RESEARCHER", desc: "Someone who can ground this mess in actual data before you build the wrong thing.", student: "researcher" }
+                ],
+                week1Title: "MAKING SENSE OF THE CHAOS",
+                week1Description: `The client sends another email with "just one more thing." It's actually seven more things.<br><br>Your intern reads the entire email thread from the beginning.`,
+                week1Results: {
+                    accountCoordinator: `The Account Coordinator spent the week mapping every client request, finding the patterns, and translating the chaos into three clear objectives.<br><br>They schedule a call with the client, present the roadmap, and get buy-in on what's actually achievable.<br><br>The deck goes from 52 slides to 18.<br><br>Your team can breathe again.`,
+                    strategist: `The Strategist spent the week looking for the thread that connects all the random requests.<br><br>They come back with: "Everything they're asking for points to one problem: they don't know who they are anymore. What if we helped them figure that out first?"<br><br>You present this to the client. They pause. Then say, "That's exactly what we need."`,
+                    researcher: `The Researcher spent the week gathering data: competitive analysis, customer feedback, industry trends, and market positioning.<br><br>They present their findings in a clear, visual deck that shows what's actually working in the category.<br><br>The client reads it. Then says, "Okay, this helps. Let's focus on this direction."`
+                },
+                week2Challenge: "BUILDING THE ACTUAL PITCH",
+                week2Description: `The direction is clear. Now you need someone to help turn this strategy into a pitch that actually wins.<br><br>You need more hands.`,
+                secondChoices: {
+                    accountCoordinator: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Turn The Account Coordinator's framework into compelling pitch narrative.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Design a deck that makes the strategy feel inevitable.", student: "designer" },
+                        { letter: "C", title: "BRING IN A STRATEGIST", desc: "Add the consumer insight that makes this pitch irrefutable.", student: "strategist" }
+                    ],
+                    strategist: [
+                        { letter: "A", title: "BRING IN A COPYWRITER", desc: "Write the story that brings The Strategist's insight to life.", student: "copywriter" },
+                        { letter: "B", title: "BRING IN A DESIGNER", desc: "Create visuals that make the strategy tangible and memorable.", student: "designer" },
+                        { letter: "C", title: "BRING IN AN ACCOUNT COORDINATOR", desc: "Structure the pitch flow and manage stakeholder expectations.", student: "accountCoordinator" }
+                    ],
+                    researcher: [
+                        { letter: "A", title: "BRING IN A STRATEGIST", desc: "Turn The Researcher's data into a compelling strategic narrative.", student: "strategist" },
+                        { letter: "B", title: "BRING IN A COPYWRITER", desc: "Write the pitch story using The Researcher's findings as proof points.", student: "copywriter" },
+                        { letter: "C", title: "BRING IN A DESIGNER", desc: "Visualize The Researcher's data in a way that's impossible to ignore.", student: "designer" }
+                    ]
+                },
+                collaboration: `They split the work without you asking them to.<br><br>One handles the strategic narrative and data visualization. The other builds the pitch flow and creative concepts.<br><br>They present to you before presenting to the client. The deck tells a clear story. You make one small note. They adjust immediately.`
+            }
+        };
+
+        // Game state
+        let gameState = {
+            scenario: null,
+            firstStudent: null,
+            secondStudent: null,
+            history: [1]
+        };
+
+        // Sound effects
+        const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        
+        function playSound(frequency, duration) {
+            try {
+                const oscillator = audioContext.createOscillator();
+                const gainNode = audioContext.createGain();
+                oscillator.connect(gainNode);
+                gainNode.connect(audioContext.destination);
+                oscillator.frequency.value = frequency;
+                oscillator.type = "square";
+                gainNode.gain.setValueAtTime(0.1, audioContext.currentTime);
+                gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
+                oscillator.start(audioContext.currentTime);
+                oscillator.stop(audioContext.currentTime + duration);
+            } catch (e) {}
+        }
+
+        function playClick() {
+            playSound(440, 0.08);
+        }
+
+        function playSuccess() {
+            playSound(523, 0.1);
+            setTimeout(() => playSound(659, 0.1), 80);
+            setTimeout(() => playSound(784, 0.12), 160);
+        }
+
+        // Navigation
+        function goToFrame(frameNumber) {
+            playClick();
+            
+            // Add to history
+            gameState.history.push(frameNumber);
+            
+            document.querySelectorAll(".frame").forEach(frame => {
+                frame.classList.remove("active");
+            });
+            document.getElementById("frame" + frameNumber).classList.add("active");
+            updateBackButton();
+            window.scrollTo(0, 0);
+        }
+
+        function goBack() {
+            if (gameState.history.length > 1) {
+                playClick();
+                // Remove current frame
+                gameState.history.pop();
+                // Get previous frame
+                const previousFrame = gameState.history[gameState.history.length - 1];
+                
+                document.querySelectorAll(".frame").forEach(frame => {
+                    frame.classList.remove("active");
+                });
+                document.getElementById("frame" + previousFrame).classList.add("active");
+                updateBackButton();
+                window.scrollTo(0, 0);
+            }
+        }
+
+        function updateBackButton() {
+            const backBtn = document.getElementById("backBtn");
+            backBtn.disabled = gameState.history.length <= 1;
+        }
+
+        // updateProgress function removed - progress bar eliminated
+
+        // Scenario selection
+        function selectScenario(scenarioKey) {
+            gameState.scenario = scenarioKey;
+            const scenario = scenarios[scenarioKey];
+            
+            // Populate Frame 4
+            document.getElementById("scenarioContext").textContent = scenario.context;
+            document.getElementById("scenarioTitle").textContent = scenario.title;
+            document.getElementById("scenarioDescription").innerHTML = scenario.description;
+            
+            // Populate first choices
+            const choicesHTML = scenario.firstChoices.map(choice => `
+                <div class="choice-btn" onclick="selectFirstStudent('${choice.student}'); goToFrame(5);">
+                    <div class="choice-letter">${choice.letter}</div>
+                    <div class="choice-content">
+                        <div class="choice-title">${choice.title}</div>
+                        <div class="choice-desc">${choice.desc}</div>
+                    </div>
+                </div>
+            `).join("");
+            document.getElementById("firstChoices").innerHTML = choicesHTML;
+        }
+
+        function selectFirstStudent(studentKey) {
+            gameState.firstStudent = studentKey;
+            const student = students[studentKey];
+            const scenario = scenarios[gameState.scenario];
+            const illustration = studentIllustrations[studentKey];
+            
+            document.getElementById("student1Card").innerHTML = `
+                <div class="student-header">
+                    <div class="student-portrait">
+                        <img src="${illustration}" alt="${student.role}">
+                    </div>
+                    <div class="student-info">
+                        <div class="student-name">${student.role}</div>
+                    </div>
+                </div>
+                <div class="student-tagline">"${student.tagline}"</div>
+                <div class="student-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Skills:</div>
+                        <div class="detail-value">${student.skills}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Vibe:</div>
+                        <div class="detail-value">${student.vibe}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Interests:</div>
+                        <div class="detail-value">${student.obsession}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById("week1Title").textContent = scenario.week1Title;
+            document.getElementById("week1Description").innerHTML = scenario.week1Description;
+            document.getElementById("week1ResultTitle").textContent = "WHAT " + student.role.toUpperCase() + " DELIVERED";
+            document.getElementById("week1Result").innerHTML = scenario.week1Results[studentKey];
+            
+            document.getElementById("week2Challenge").textContent = scenario.week2Challenge;
+            document.getElementById("week2Description").innerHTML = scenario.week2Description;
+            
+            const secondChoices = scenario.secondChoices[studentKey];
+            const choicesHTML = secondChoices.map(choice => `
+                <div class="choice-btn" onclick="selectSecondStudent('${choice.student}'); goToFrame(9);">
+                    <div class="choice-letter">${choice.letter}</div>
+                    <div class="choice-content">
+                        <div class="choice-title">${choice.title}</div>
+                        <div class="choice-desc">${choice.desc}</div>
+                    </div>
+                </div>
+            `).join("");
+            document.getElementById("secondChoices").innerHTML = choicesHTML;
+        }
+
+        function selectSecondStudent(studentKey) {
+            gameState.secondStudent = studentKey;
+            const student = students[studentKey];
+            const scenario = scenarios[gameState.scenario];
+            const illustration = studentIllustrations[studentKey];
+            
+            document.getElementById("student2Card").innerHTML = `
+                <div class="student-header">
+                    <div class="student-portrait">
+                        <img src="${illustration}" alt="${student.role}">
+                    </div>
+                    <div class="student-info">
+                        <div class="student-name">${student.role}</div>
+                    </div>
+                </div>
+                <div class="student-tagline">"${student.tagline}"</div>
+                <div class="student-details">
+                    <div class="detail-row">
+                        <div class="detail-label">Skills:</div>
+                        <div class="detail-value">${student.skills}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Vibe:</div>
+                        <div class="detail-value">${student.vibe}</div>
+                    </div>
+                    <div class="detail-row">
+                        <div class="detail-label">Interests:</div>
+                        <div class="detail-value">${student.obsession}</div>
+                    </div>
+                </div>
+            `;
+            
+            document.getElementById("collaborationDescription").innerHTML = scenario.collaboration;
+            
+            const student1 = students[gameState.firstStudent];
+            const student2 = students[gameState.secondStudent];
+            const illustration1 = studentIllustrations[gameState.firstStudent];
+            const illustration2 = studentIllustrations[gameState.secondStudent];
+            document.getElementById("teamDisplay").innerHTML = `
+                <div class="team-member">
+                    <div class="team-portrait">
+                        <img src="${illustration1}" alt="${student1.role}">
+                    </div>
+                    <div class="team-name">${student1.role}</div>
+                </div>
+                <div class="team-member">
+                    <div class="team-portrait">
+                        <img src="${illustration2}" alt="${student2.role}">
+                    </div>
+                    <div class="team-name">${student2.role}</div>
+                </div>
+            `;
+        }
+
+        function handleFormSubmit(event) {
+            event.preventDefault();
+            playSuccess();
+            
+            const name = document.getElementById("name").value;
+            const organization = document.getElementById("organization").value;
+            const email = document.getElementById("email").value;
+            const roles = document.getElementById("roles").value;
+            const message = document.getElementById("message").value;
+            
+            console.log("Form submission:", { name, organization, email, roles, message, gameState });
+            
+            alert(`Thanks, ${name}!\n\nThis is a prototype — in production, this would:\n• Send your request to Algonquin's internship coordinator\n• Email you confirmation\n• Match you with students who fit your needs\n\nFor real inquiries: internships@algonquincollege.com`);
+            
+            return false;
+        }
+
+        function resetGame() {
+            playSuccess();
+            gameState = { scenario: null, firstStudent: null, secondStudent: null, history: [3] };
+            goToFrame(3);
+        }
+
+        updateBackButton();
+
+        document.addEventListener("click", function initAudio() {
+            if (audioContext.state === "suspended") {
+                audioContext.resume();
+            }
+        }, { once: true });
+    </script>
+</body>
+</html>
