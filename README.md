@@ -13,7 +13,7 @@ Players make hiring decisions and see how different student roles (Copywriter, D
 
 ## How to Play
 
-[View the live game here](#) *(link will be added after deployment)*
+[View the live game here]([#](https://the-internal-solution.vercel.app/)) *(link will be added after deployment)*
 
 Or run locally:
 1. Download this repository
